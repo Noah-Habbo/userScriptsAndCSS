@@ -5,14 +5,15 @@
 // @match       https://thehabbowh.org/community/tags
 // @match       https://thehabbowh.org/eedb/search/*
 // @match       https://thehabbowh.org/legislative/index
+// @match       https://thehabbowh.org/legislation/show/*
 // @match       https://thehabbowh.org/ss/index
 // @match       https://thehabbowh.org/executive/index
 // @match       https://thehabbowh.org/judicial/index
 // @match       https://thehabbowh.org/*/leadership/members
 // @grant       none
-// @version     0.2
-// @author      NoahC500
+// @version     0.3
 // @license     Unlicense
+// @author      NoahC500
 // ==/UserScript==
 if (document.location.href.split('/')[5] == 'members') {
 	x = document.getElementsByClassName('col-lg-8')[0].getElementsByClassName('title-lr'); /* Branch tasking pages */
@@ -48,6 +49,13 @@ if (document.location.href.split('/')[5] == 'members') {
 				/* Redirect EE:DB search results (this is as EE:DB pages use numerical IDs, not usernames) */
 				if (new URLSearchParams(document.location.href).get('auto') == '1') {
 					document.location.href = document.getElementById('app').getElementsByTagName('a')[0].href;
+				}
+			} else {
+				if (document.location.href.split('/')[4] == 'show') {
+					x = document.getElementsByClassName('card-body');
+					for (let i = 9; i < x.length - 1; i++) {
+						x[i].getElementsByClassName('text-center')[0].outerHTML = x[i].getElementsByClassName('text-center')[0].outerHTML.replace(/(.*)(<br>)\s*(\S*)<br>(.*)/s, `$1<br><a href="https://thehabbowh.org/eedb/search/$3?&auto=1">$3</a><br>$4`);
+					}
 				}
 			}
 		}
